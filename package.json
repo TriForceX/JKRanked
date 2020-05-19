@@ -1,0 +1,26 @@
+{
+  "name": "jkdata",
+  "version": "1.0.0",
+  "description": "Service to collect data from log in Jedi Knight Server",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "jkdata"
+  },
+  "keywords": [
+    "jedi",
+    "knight",
+    "multiplayer",
+    "data"
+  ],
+  "author": "Mhoker",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
+    "sqlite3": "^4.2.0"
+  }
+}
