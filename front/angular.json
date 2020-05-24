@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "skirata": {
+    "jedi-knight-league": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/skirata",
+            "outputPath": "dist/jedi-knight-league",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -63,18 +63,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "skirata:build"
+            "browserTarget": "jedi-knight-league:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "skirata:build:production"
+              "browserTarget": "jedi-knight-league:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "skirata:build"
+            "browserTarget": "jedi-knight-league:build"
           }
         },
         "test": {
@@ -111,18 +111,18 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "skirata:serve"
+            "devServerTarget": "jedi-knight-league:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "skirata:serve:production"
+              "devServerTarget": "jedi-knight-league:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "skirata",
+  "defaultProject": "jedi-knight-league",
   "cli": {
     "analytics": false
   }
