@@ -8,7 +8,7 @@
       "schematics": {},
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
+      "prefix": "app/dashboard",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -21,12 +21,11 @@
             "aot": true,
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/app/css",
+              "src/app/js",
+              "src/app/images"
             ],
-            "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/styles.css"
-            ],
+            "styles": [],
             "scripts": []
           },
           "configurations": {
@@ -63,7 +62,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "jedi-knight-league:build"
+            "browserTarget": "jedi-knight-league:build",
+            "port": 80
           },
           "configurations": {
             "production": {
@@ -86,7 +86,9 @@
             "karmaConfig": "karma.conf.js",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/app/css",
+              "src/app/js",
+              "src/app/images"
             ],
             "styles": [
               "src/styles.css"

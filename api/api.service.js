@@ -1,5 +1,20 @@
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
 var express = require('express');
 var app = express();
+var cors = require('cors');
+
+// Certificate
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/skirata.pro/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/skirata.pro/cert.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/skirata.pro/chain.pem', 'utf8');
+
+const credentials = {
+	key: privateKey,
+	cert: certificate,
+	ca: ca
+};
 
 const Database = require('better-sqlite3');
 
@@ -7,8 +22,12 @@ const db = new Database('/root/jkdata/db/data.db', {
     //verbose: console.log 
 });
 
+// Use CORS FROM with Express
+app.use(cors());
 
-app.use(express.static(__dirname + '/front'));
+app.use(express.static(__dirname + './../front/dist/jedi-knight-league',{ dotfiles: 'allow' }));
+
+app.use(express.static(__dirname + '/static', { dotfiles: 'allow' } ))
 
 app.get('/API/stats-ffa', function (req, res, next) {
   var sql = `SELECT winner, color_winner, win, lose,  win*1.0/(win+lose) AS ratio FROM (
@@ -122,7 +141,7 @@ app.get('/API/notw', function (req, res, next) {
 
 //saber ELO level
 app.get('/API/saber_elo_level', function (req, res, next) {
-  var sql = `select player, elo, saber_exp FROM (
+  var sql = `select color_winner, elo, saber_exp FROM (
     SELECT winner, color_winner, win+lose wl, (win*40)+(lose*10) as saber_exp FROM (
     SELECT winner, color_winner, count(winner) as win from saber_duel
     GROUP BY winner)
@@ -144,7 +163,7 @@ app.get('/API/saber_elo_level', function (req, res, next) {
 
 //FF ELO level
 app.get('/API/ff_elo_level', function (req, res, next) {
-  var sql = `select player, elo, ff_exp FROM (
+  var sql = `select color_winner, elo, ff_exp FROM (
     SELECT winner, color_winner, win+lose wl, (win*40)+(lose*10) as ff_exp FROM (
     SELECT winner, color_winner, count(winner) as win from full_force_duel
     GROUP BY winner)
@@ -164,6 +183,14 @@ app.get('/API/ff_elo_level', function (req, res, next) {
   })
 });
 
-app.listen(80, function () {
-  console.log('Example app listening on port 80!');
+// Starting both http & https servers
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(credentials, app);
+
+httpServer.listen(80, () => {
+	console.log('HTTP Server running on port 80');
+});
+
+httpsServer.listen(443, () => {
+	console.log('HTTPS Server running on port 443');
 });

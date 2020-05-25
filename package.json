@@ -2,7 +2,7 @@
   "name": "jkdata",
   "version": "1.0.0",
   "description": "Service to collect data from log in Jedi Knight Server",
-  "main": "index.js",
+  "main": "server/server.js",
   "scripts": {
     "test": "test"
   },
@@ -23,6 +23,7 @@
     "elo-rating": "^1.0.1",
     "express": "^4.17.1",
     "gamedig": "^2.0.20",
-    "http": "0.0.1-security"
+    "http": "0.0.1-security",
+    "cors": "^2.8.5"
   }
 }

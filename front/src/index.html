@@ -1,13 +1,420 @@
-<!doctype html>
+<!DOCTYPE html>
+<!-- 
+Template Name:  UnicoAdmin Template - Template build with Twitter Bootstrap 4
+Version: 1.0.0
+Author: Duocoder
+Website: https://duocoder.com
+License: You must have a valid license purchased from https://wrapbootstrap.com/ in order to legally use this theme for your project.
+-->
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Skirata</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-</head>
-<body>
-  <app-root></app-root>
-</body>
-</html>
+    <head>
+        <base href="/">
+        <meta charset="utf-8">
+        <title>
+            Analytics - Dashboard - Skirata.PRO v1.0.0
+        </title>
+        <meta name="description" content="Analytics">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
+        <!-- Call App Mode on ios devices -->
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <!-- Remove Tap Highlight on Windows Phone IE -->
+        <meta name="msapplication-tap-highlight" content="no">
+        <!-- base css -->
+        <link rel="stylesheet" media="screen, print" href="./app/css/vendors.bundle.css">
+        <link rel="stylesheet" media="screen, print" href="./app/css/app.bundle.css">
+        <!-- Place favicon.ico in the root directory -->
+        <link rel="apple-touch-icon" sizes="180x180" href="./app/images/favicon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="./app/images/favicon.png">
+        <link rel="mask-icon" href="./app/images/favicon.png" color="#6f04f2">
+        <link rel='icon' href='./app/images/favicon.png' type='image/x-icon'>
+        <link rel="stylesheet" media="screen, print" href="./app/css/statistics/chartjs/chartjs.css">
+        <link rel="stylesheet" media="screen, print" href="./app/css/datagrid/datatables/datatables.bundle.css">
+    </head>
+    <body>
+        <app-root></app-root>
+      <!-- BEGIN Page Settings -->
+      
+      <script>
+      (function(i, s, o, g, r, a, m)
+      {
+          i['GoogleAnalyticsObject'] = r;
+          i[r] = i[r] || function()
+          {
+              (i[r].q = i[r].q || []).push(arguments)
+          }, i[r].l = 1 * new Date();
+          a = s.createElement(o),
+              m = s.getElementsByTagName(o)[0];
+          a.async = 1;
+          a.src = g;
+          m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-107217018-10', 'auto');
+      ga('send', 'pageview');
+
+      </script>
+      <!-- base vendor bundle: 
+      DOC: if you remove pace.js from core please note on Internet Explorer some CSS animations may execute before a page is fully loaded, resulting 'jump' animations 
+      + pace.js (recommended)
+      + jquery.js (core)
+      + popper.js (core)
+      + bootstrap.js (core)
+      + slimscroll.js (extension)
+      + waves.js (extension) -->
+      <script src="./app/js/vendors.bundle.js"></script>
+      <script src="./app/js/app.bundle.js"></script>
+      <script src="./app/js/datagrid/datatables/datatables.bundle.js"></script>
+      <script src="./app/js/statistics/chartjs/chartjs.bundle.js"></script>
+      <script src="./app/js/statistics/jquery-sparkline/jquery-sparkline.bundle.js"></script>
+      <script>
+          $( document ).ready(function() {
+            /*
+            var graph1 = getComputedStyle(document.documentElement).getPropertyValue('--primary');
+            var graph2 = getComputedStyle(document.documentElement).getPropertyValue('--secondary');
+            var graph3 = getComputedStyle(document.documentElement).getPropertyValue('--tertiary');
+            var shadow = getComputedStyle(document.documentElement).getPropertyValue('--main-graph-line-color');
+            var font = getComputedStyle(document.documentElement).getPropertyValue('--content-font-color');
+
+            console.log(font);
+            console.log(hexToRgbA(font,1));
+            console.log(addAlphaChannel(font, 1));
+
+            Chart.defaults.global.legend.labels.usePointStyle = true;
+
+            var randomScalingFactor = function()
+            {
+                var num = Math.floor(Math.random() * 99) + 1;
+                return num *= Math.floor(Math.random() * 2) == 1 ? 1 : 1;
+            };
+
+            var randomScalingFactor2 = function()
+            {
+                return Math.round(Math.random() * 100);
+            };
+
+            var ctxBar = document.getElementById('chart-bar').getContext('2d');
+
+            var gradient = ctxBar.createLinearGradient(0, 0, 0, 180);
+            gradient.addColorStop(0, addAlphaChannel(graph1, 0.9));
+            gradient.addColorStop(1, addAlphaChannel(graph1, 0.2));
+
+            var gradient2 = ctxBar.createLinearGradient(0, 0, 0, 180);
+            gradient2.addColorStop(0, addAlphaChannel(graph2, 0.9));
+            gradient2.addColorStop(1, addAlphaChannel(graph2, 0.2));
+
+            var gradient3 = ctxBar.createLinearGradient(0, 0, 0, 180);
+            gradient3.addColorStop(0, addAlphaChannel(graph3, 0.9));
+            gradient3.addColorStop(1, addAlphaChannel(graph3, 0.2));
+
+            var configBar = {
+                type: 'bar',
+                data:
+                {
+                    labels: ['2019', '2020'],
+                    datasets: [
+                    {
+                        label: 'D1',
+                        backgroundColor: gradient, //addAlphaChannel(graph1, 0.70),
+                        hoverBackgroundColor: addAlphaChannel(graph1, 0.70),
+                        borderWidth: 2,
+                        borderColor: addAlphaChannel(graph1, 0.8),
+                        hoverBorderColor: addAlphaChannel(graph1, 1),
+                        data: [
+                            randomScalingFactor(),
+                            randomScalingFactor(),
+                            randomScalingFactor()
+                        ]
+                    },
+                    {
+                        label: 'D2',
+                        backgroundColor: gradient2, //addAlphaChannel(graph2, 0.70),
+                        hoverBackgroundColor: addAlphaChannel(graph2, 0.70),
+                        borderWidth: 2,
+                        borderColor: addAlphaChannel(graph2, 0.8),
+                        hoverBorderColor: addAlphaChannel(graph2, 1),
+                        data: [
+                            randomScalingFactor(),
+                            randomScalingFactor(),
+                            randomScalingFactor()
+                        ]
+                    }]
+
+                },
+                options:
+                {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend:
+                    {
+                        labels:
+                        {
+                            fontColor: addAlphaChannel(font, 1),
+                            padding: 15
+                        },
+                        display: false,
+                        position: 'bottom'
+                    },
+                    scales:
+                    {
+                        yAxes: [
+                        {
+                            gridLines:
+                            {
+                                color: addAlphaChannel(font, 0.1),
+                                zeroLineColor: addAlphaChannel(font, 0.1)
+                            },
+                            ticks:
+                            {
+                                fontColor: addAlphaChannel(font, 1),
+                                beginAtZero: true,
+                                reverse: false,
+                                stepSize: 20
+                            }
+                        }],
+                        xAxes: [
+                        {
+                            gridLines:
+                            {
+                                color: addAlphaChannel(font, 0.1),
+                                zeroLineColor: addAlphaChannel(font, 0.1)
+                            },
+                            ticks:
+                            {
+                                fontColor: addAlphaChannel(font, 1),
+                                beginAtZero: true,
+                                reverse: false
+                            }
+                        }]
+                    },
+                    title:
+                    {
+                        display: false
+                    }
+                }
+            };
+
+
+            var ctxLine = document.getElementById('chart-line').getContext('2d');
+
+            var gradient = ctxLine.createLinearGradient(0, 0, 0, 200);
+            gradient.addColorStop(0, addAlphaChannel(graph1, 0.8));
+            gradient.addColorStop(0.5, addAlphaChannel(graph1, 0.5));
+            gradient.addColorStop(1, addAlphaChannel(graph1, 0));
+
+            var gradient2 = ctxLine.createLinearGradient(0, 0, 0, 200);
+            gradient2.addColorStop(0, addAlphaChannel(graph2, 0.8));
+            gradient2.addColorStop(0.5, addAlphaChannel(graph2, 0.5));
+            gradient2.addColorStop(1, addAlphaChannel(graph2, 0));
+
+            var gradient3 = ctxLine.createLinearGradient(0, 0, 0, 200);
+            gradient3.addColorStop(0, addAlphaChannel(graph3, 0.8));
+            gradient3.addColorStop(0.5, addAlphaChannel(graph3, 0.5));
+            gradient3.addColorStop(1, addAlphaChannel(graph3, 0));
+
+            var configLine = {
+                type: 'line',
+                data:
+                {
+                    labels: [
+                        'July',
+                        'August',
+                        'September',
+                        'October',
+                        'November',
+                        'December'
+                    ],
+                    datasets: [
+                    {
+                        data: [
+                            randomScalingFactor(),
+                            randomScalingFactor(),
+                            randomScalingFactor(),
+                            randomScalingFactor(),
+                            randomScalingFactor(),
+                            randomScalingFactor()
+                        ],
+                        label: 'Filled',
+                        pointRadius: 1,
+                        backgroundColor: gradient3, //addAlphaChannel(graph3, 0.70),
+                        hoverBackgroundColor: addAlphaChannel(graph3, 0.90),
+                        borderWidth: 2,
+                        borderColor: addAlphaChannel(graph3, 0.8),
+                        hoverBorderColor: addAlphaChannel(graph3, 1),
+                        pointBackgroundColor: addAlphaChannel(graph3, 0.3)
+                    }]
+                },
+                options:
+                {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales:
+                    {
+                        yAxes: [
+                        {
+                            gridLines:
+                            {
+                                color: addAlphaChannel(font, 0.1),
+                                zeroLineColor: addAlphaChannel(font, 0.1)
+                            },
+                            ticks:
+                            {
+                                fontColor: addAlphaChannel(font, 1),
+                                beginAtZero: false,
+                                reverse: false,
+                                stepSize: 20
+                            }
+                        }],
+                        xAxes: [
+                        {
+                            gridLines:
+                            {
+                                color: addAlphaChannel(font, 0.1),
+                                zeroLineColor: addAlphaChannel(font, 0.1)
+                            },
+                            ticks:
+                            {
+                                fontColor: addAlphaChannel(font, 1),
+                                beginAtZero: false,
+                                reverse: false
+                            }
+                        }]
+                    },
+                    legend:
+                    {
+                        labels:
+                        {
+                            fontColor: addAlphaChannel(font, 1),
+                            padding: 15
+                        },
+                        display: false,
+                        position: 'bottom'
+                    },
+                    elements:
+                    {
+                        point:
+                        {
+
+                        }
+                    }
+                }
+            };
+
+            //Bar Chart
+            window.myBar = new Chart(ctxBar, configBar);
+
+            //Line Chart
+            window.myLine = new Chart(ctxLine, configLine);
+
+
+
+            document.getElementById('randomizeDataLine').addEventListener('click', function()
+            {
+
+                configLine.data.datasets.forEach(function(dataset)
+                {
+                    dataset.data = dataset.data.map(function()
+                    {
+                        return randomScalingFactor();
+                    });
+                });
+                window.myLine.update();
+
+            });
+
+            document.getElementById('randomizeDataBar').addEventListener('click', function()
+            {
+
+                configBar.data.datasets.forEach(function(dataset)
+                {
+                    dataset.data = dataset.data.map(function()
+                    {
+                        return randomScalingFactor();
+                    });
+                });
+                window.myBar.update();
+
+            });
+
+            function addAlphaChannel(rgb, alpha)
+            {
+                if (rgb.indexOf("#") >= 0)
+                { //Is Hex
+                    rgb = hexToRgbA(rgb, alpha);
+                }
+                if (rgb.indexOf("rgba") >= 0)
+                {
+                    var lastComma = rgb.lastIndexOf(',');
+                    var newBGColor = rgb.slice(0, lastComma + 1) + alpha + ")";
+                }
+                else
+                {
+                    var oldBGColor = rgb; //rgb(100,100,100)
+                    var newBGColor = oldBGColor.replace('rgb', 'rgba').replace(')', ', ' + alpha + ')'); //rgba(100,100,100,.8)
+                }
+                return newBGColor;
+            }
+
+            function hexToRgbA(hex, alpha = 1) {
+                const [r, g, b] = hex.match(/\w\w/g).map(x => parseInt(x, 16));
+                return `rgba(${r},${g},${b},${alpha})`;
+            }
+
+
+            
+            
+           
+            $("#sparkline" + 0).sparkline([1,-1,1,-1,1,1,1,-1,-1,1],
+            {
+                type: 'bar',
+                height: '19px',
+                barColor: graph3,
+                negBarColor: graph2
+            });
+
+            $("#sparkline" + 1).sparkline([1,-1,1,-1,1,1,1,-1,-1,1],
+            {
+                type: 'bar',
+                height: '19px',
+                barColor: graph3,
+                negBarColor: graph2
+            });
+            */
+
+            setTimeout(datatables,200);
+            function datatables(){
+                $('#saber_ranking').DataTable({
+                    "order": [[ 2, "desc" ]],
+                    "bLengthChange": false,
+                    "deferRender": true,
+                    "aoColumnDefs": [
+                        { "bSortable": false, "aTargets": [ 0 ] }
+                    ],
+                    "oLanguage": {
+                                "sInfo": '',
+                                "sInfoFiltered": ''
+                    },
+                    "aaSorting": [[ 1, 'asc' ]] // ?
+                });
+
+                $('#full_force_ranking').DataTable({
+                    "order": [[ 2, "desc" ]],
+                    "bLengthChange": false,
+                    "deferRender": true,
+                    "aoColumnDefs": [
+                        { "bSortable": false, "aTargets": [ 0 ] }
+                    ],
+                    "oLanguage": {
+                                "sInfo": '',
+                                "sInfoFiltered": ''
+                    },
+                    "aaSorting": [[ 1, 'asc' ]] // ?
+                });
+            }
+            
+        });
+
+      </script>
+      </body>
+      </html>
+
