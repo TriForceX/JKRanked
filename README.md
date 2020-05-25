@@ -1,4 +1,4 @@
-# skirata.pro
+# Skirata.PRO
 Save FFA, Saber Duels and Full Force Duels in a SQLite Database
 
 * Maintainer
