@@ -11,7 +11,7 @@ License: You must have a valid license purchased from https://wrapbootstrap.com/
         <base href="/">
         <meta charset="utf-8">
         <title>
-            Analytics - Dashboard - Skirata.PRO v1.0.0
+            Analytics - Dashboard - Skirata.PRO v1.1.0
         </title>
         <meta name="description" content="Analytics">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -381,29 +381,23 @@ License: You must have a valid license purchased from https://wrapbootstrap.com/
             });
             */
 
-            setTimeout(datatables,200);
+            setTimeout(datatables,250);
             function datatables(){
                 $('#saber_ranking').DataTable({
-                    "order": [[ 2, "desc" ]],
+                    "order": [[ 0, "asc" ]],
                     "bLengthChange": false,
                     "deferRender": true,
-                    "aoColumnDefs": [
-                        { "bSortable": false, "aTargets": [ 0 ] }
-                    ],
                     "oLanguage": {
                                 "sInfo": '',
                                 "sInfoFiltered": ''
                     },
-                    "aaSorting": [[ 1, 'asc' ]] // ?
+                    "aaSorting": [[ 1, 'desc' ]] // ?
                 });
 
                 $('#full_force_ranking').DataTable({
-                    "order": [[ 2, "desc" ]],
+                    "order": [[ 0, "asc" ]],
                     "bLengthChange": false,
                     "deferRender": true,
-                    "aoColumnDefs": [
-                        { "bSortable": false, "aTargets": [ 0 ] }
-                    ],
                     "oLanguage": {
                                 "sInfo": '',
                                 "sInfoFiltered": ''

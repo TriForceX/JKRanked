@@ -141,7 +141,9 @@ app.get('/API/notw', function (req, res, next) {
 
 //saber ELO level
 app.get('/API/saber_elo_level', function (req, res, next) {
-  var sql = `select color_winner, elo, saber_exp FROM (
+  var sql = `select ROW_NUMBER() OVER (
+    ORDER BY elo DESC
+) pos, color_winner, elo, saber_exp FROM (
     SELECT winner, color_winner, win+lose wl, (win*40)+(lose*10) as saber_exp FROM (
     SELECT winner, color_winner, count(winner) as win from saber_duel
     GROUP BY winner)
@@ -163,7 +165,9 @@ app.get('/API/saber_elo_level', function (req, res, next) {
 
 //FF ELO level
 app.get('/API/ff_elo_level', function (req, res, next) {
-  var sql = `select color_winner, elo, ff_exp FROM (
+  var sql = `select ROW_NUMBER() OVER (
+    ORDER BY elo DESC
+) pos, color_winner, elo, ff_exp FROM (
     SELECT winner, color_winner, win+lose wl, (win*40)+(lose*10) as ff_exp FROM (
     SELECT winner, color_winner, count(winner) as win from full_force_duel
     GROUP BY winner)
@@ -182,6 +186,26 @@ app.get('/API/ff_elo_level', function (req, res, next) {
     "data":data
   })
 });
+
+//Server Stats
+app.get('/API/server_stats', function (req, res, next) {
+  var sql = `select count(*) as total_players, total_ffa_kills, total_saber_duels, total_ff_duels from (
+    select distinct winner as total_players from ffa)
+    join (
+    select count(*) as total_ffa_kills from ffa)
+    join (
+    select count(*) as total_saber_duels from saber_duel)
+    join (
+    select count(*) as total_ff_duels from full_force_duel);`;
+  var stmt = db.prepare(sql);
+  var data = stmt.all();
+  
+  res.json({
+    "message":"success",
+    "data":data
+  })
+});
+
 
 // Starting both http & https servers
 const httpServer = http.createServer(app);

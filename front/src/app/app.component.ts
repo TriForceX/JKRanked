@@ -7,9 +7,10 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Jedi Knight League';
+  title = 'Skirata.PRO';
   saber_elo_level:any;
   full_force_elo_level:any;
+  server_stats:any;
 
   constructor(
     private http: HttpClient 
@@ -31,6 +32,14 @@ export class AppComponent {
           
           }
         );
+
+        this.http.get('https://skirata.pro/API/server_stats').subscribe(
+          data => {
+            this.server_stats = data;
+            this.server_stats = this.server_stats.data[0];
+            console.log(this.server_stats);
+            }
+          );
   }
 
   colorPlayer(name){
@@ -57,16 +66,16 @@ export class AppComponent {
 
   getLeague(elo){
     let league = '';
-    if(elo < 1199){
-      league = 'Bronze';
-    }else if(elo > 1200 && elo < 1299){
-      league = 'Silver';
-    }else if(elo > 1300 && elo < 1399){
-      league = 'Gold';
-    }else if(elo > 1400 && elo < 1499){
-      league = 'Platinum';
-    }else if(elo > 1500){
-      league = 'Diamond';
+    if(elo <= 1199){
+      league = '<span class="badge badge-danger">Bronze</span>';
+    }else if(elo >= 1200 && elo <= 1299){
+      league = '<span class="badge badge-info">Silver</span>';
+    }else if(elo >= 1300 && elo <= 1399){
+      league = '<span class="badge badge-quaternary">Gold</span>';
+    }else if(elo >= 1400 && elo <= 1499){
+      league = '<span class="badge badge-tertiary">Platinum</span>';
+    }else if(elo >= 1500){
+      league = '<span class="badge badge-secondary">Diamond</span>';
     }
     return league;
   }

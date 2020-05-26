@@ -532,13 +532,14 @@ a[data-toggle="collapse"] {
     border-bottom: 1px solid var(--content-border-color) !important;
 }
 
-.sidebar-header img {
-    height: 1.0em;
+.sidebar-header .small_name {
+    height: 1.5em;
     left: 0;
-    margin-left: 0;
+    margin-left: 0px;
+    margin-right: 0px;
     float: left;
-    margin-top: 11px;
-    /*filter: var(--main-logo-img-brightness);*/
+    margin-top: 5px;
+    color: var(--main-logo-font-color);
 }
 
 
@@ -1314,7 +1315,7 @@ body.modal-open .modal::-webkit-scrollbar-thumb:vertical:hover,body::-webkit-scr
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    padding: 0 2rem;
+    padding: 0 1rem;
     -webkit-transition: all 0.4s;
     -moz-transition: all 0.4s;
     -o-transition: all 0.4s;
@@ -1338,7 +1339,7 @@ body.modal-open .modal::-webkit-scrollbar-thumb:vertical:hover,body::-webkit-scr
 }
 
 .info-card .profile-image {
-    width: 3.125rem;
+    width: 4rem;
     height: auto;
     display: inline-block;
     z-index: 2;
@@ -1697,5 +1698,5 @@ pre {
 }
 
 .white_name{
-    color: white;
+    color: #b3a4cf;
 }
