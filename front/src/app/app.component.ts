@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from './data.service';
+//declare function datatables(): any;
 
 @Component({
   selector: 'app-root',
@@ -8,6 +9,7 @@ import { DataService } from './data.service';
 })
 export class AppComponent implements OnInit {
   title = 'Skirata.PRO';
+  ffa_wl_ratio:any;
   saber_elo_level:any;
   full_force_elo_level:any;
   server_stats:any = null;
@@ -17,10 +19,16 @@ export class AppComponent implements OnInit {
   ){}
 
   ngOnInit() {
+    
 
     this.dataService.getServerStats().subscribe((data: any[])=>{
       this.server_stats = data;
       this.server_stats = this.server_stats.data[0];
+    })  
+
+    this.dataService.getFFAwlRatio().subscribe((data: any[])=>{
+      this.ffa_wl_ratio = data;
+      this.ffa_wl_ratio = this.ffa_wl_ratio.data;
     })  
 
     this.dataService.getSaberEloLevel().subscribe((data: any[])=>{
@@ -32,6 +40,8 @@ export class AppComponent implements OnInit {
       this.full_force_elo_level = data;
       this.full_force_elo_level = this.full_force_elo_level.data;
     })  
+
+    //datatables();
     
   }
 

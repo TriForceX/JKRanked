@@ -11,6 +11,10 @@ export class DataService {
     return this.http.get('https://skirata.pro/API/server_stats');
   }
 
+  public getFFAwlRatio(){
+    return this.http.get('https://skirata.pro/API/ffa_wl_ratio');
+  }
+
   public getSaberEloLevel(){
     return this.http.get('https://skirata.pro/API/saber_elo_level');
   }

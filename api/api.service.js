@@ -151,6 +151,46 @@ app.get('/API/notw', function (req, res, next) {
   })
 });
 
+
+//FF wl ratio
+app.get('/API/ffa_wl_ratio', function (req, res, next) {
+  var sql = `
+  SELECT * FROM (
+        select ROW_NUMBER() OVER (
+            ORDER BY win DESC
+            ) pos,
+                winner,
+                color_winner,
+                win,
+                lose,
+                ratio,
+                ffa_exp
+        FROM (
+                  SELECT winner,
+                        color_winner,
+                        ifnull(win, 0)                                            as win,
+                        ifnull(lose, 0)                                           as lose,
+                        round(ifnull(win, 0) * 1.0 / (ifnull(win, 0) + ifnull(lose, 0)),2)  AS ratio,
+                        win + lose                                                   wl,
+                        (ifnull(win, 0) * 40) + (ifnull(lose, 0) * 10)            as ffa_exp
+                  FROM (
+                          SELECT winner, color_winner, count(winner) as win
+                          from ffa
+                          GROUP BY winner)
+                          LEFT JOIN (
+                      SELECT loser, color_loser, count(loser) AS lose
+                      FROM ffa
+                      GROUP BY loser) ON winner = loser)
+  ) as player;`;
+  var stmt = db.prepare(sql);
+  var data = stmt.all();
+  
+  res.json({
+    "message":"success",
+    "data":data
+  })
+});
+
 //saber ELO level
 app.get('/API/saber_elo_level', function (req, res, next) {
   var sql = `select ROW_NUMBER() OVER (
