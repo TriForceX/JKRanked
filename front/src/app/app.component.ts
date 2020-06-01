@@ -1,46 +1,40 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { DataService } from './data.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Skirata.PRO';
   saber_elo_level:any;
   full_force_elo_level:any;
-  server_stats:any;
+  server_stats:any = null;
 
   constructor(
-    private http: HttpClient 
+    private dataService: DataService
   ){}
 
   ngOnInit() {
-    this.http.get('https://skirata.pro/API/saber_elo_level').subscribe(
-      data => {
-        this.saber_elo_level = data;
-        this.saber_elo_level = this.saber_elo_level.data;
-        
-        }
-      );
 
-      this.http.get('https://skirata.pro/API/ff_elo_level').subscribe(
-        data => {
-          this.full_force_elo_level = data;
-          this.full_force_elo_level = this.full_force_elo_level.data;
-          
-          }
-        );
+    this.dataService.getServerStats().subscribe((data: any[])=>{
+      this.server_stats = data;
+      this.server_stats = this.server_stats.data[0];
+    })  
 
-        this.http.get('https://skirata.pro/API/server_stats').subscribe(
-          data => {
-            this.server_stats = data;
-            this.server_stats = this.server_stats.data[0];
-            console.log(this.server_stats);
-            }
-          );
+    this.dataService.getSaberEloLevel().subscribe((data: any[])=>{
+      this.saber_elo_level = data;
+      this.saber_elo_level = this.saber_elo_level.data;
+    })  
+
+    this.dataService.getFFEloLevel().subscribe((data: any[])=>{
+      this.full_force_elo_level = data;
+      this.full_force_elo_level = this.full_force_elo_level.data;
+    })  
+    
   }
+
 
   colorPlayer(name){
     let color_name = '';

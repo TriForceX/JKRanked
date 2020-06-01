@@ -220,9 +220,7 @@ function insertSaberRanked(){
 
     var stmt = db.prepare('SELECT date, winner, color_winner, loser, color_loser FROM saber_duel WHERE date > ? ORDER BY date;');
     var rows = stmt.all(max);
-    //console.log(rows);
     rows.forEach(function callback(value, index) {
-        console.log(value.date, value.winner, value.loser);
         var date = value.date;
         var winner = value.winner;
         var color_winner = value.color_winner;
@@ -233,7 +231,8 @@ function insertSaberRanked(){
         var loser_elo = 1200;
         var winner_exist = false;
         var loser_exist = false
-    
+        var winner_count = 0;
+        var loser_count = 0;
     
         //check if winner exist ------------------------------------
         var stmt = db.prepare('SELECT count(*) as count FROM saber_ranking WHERE player = ? AND date < ?;');
@@ -251,8 +250,24 @@ function insertSaberRanked(){
         }
         //-----------------------------------------------------------
 
-        //Get last winner duel ELO ---------------------------------
+        //Winner is apt - have more than 10 duels? ---------------------------------
         if(winner_exist){
+            var stmt = db.prepare('SELECT count(*) as count FROM saber_duel where date < ? AND (winner = ? OR loser = ?);');
+            var row = stmt.get(date, winner, winner);
+            winner_count = row.count;
+        }
+        //-----------------------------------------------------------
+
+        //Loser is apt - have more than 10 duels? ---------------------------------
+        if(loser_exist){
+            var stmt = db.prepare('SELECT count(*) as count FROM saber_duel where date < ? AND (winner = ? OR loser = ?);');
+            var row = stmt.get(date, loser, loser);
+            loser_count = row.count;
+        }
+        //-----------------------------------------------------------
+
+        //Get last winner duel ELO ---------------------------------
+        if(winner_count >=10){
             var stmt = db.prepare('SELECT max(date), elo FROM saber_ranking WHERE player = ?;');
             var row = stmt.get(winner);
             winner_elo = row.elo;
@@ -260,14 +275,22 @@ function insertSaberRanked(){
         //-----------------------------------------------------------
 
         //Get last loser duel ELO ---------------------------------
-        if(loser_exist){
+        if(loser_count >=10){
             var stmt = db.prepare('SELECT max(date), elo FROM saber_ranking WHERE player = ?;');
             var row = stmt.get(loser);
             loser_elo = row.elo;
         }
-        //-----------------------------------------------------------
 
-        var result = EloRating.calculate(winner_elo, loser_elo, true);
+        var difference =  EloRating.ratingDifference(winner_elo, loser_elo); 
+        var factorK = 20;
+
+        if(Math.abs(difference) <= 150 ) {
+            factorK = 24;
+        }else{
+            factorK = 8;
+        }
+
+        var result = EloRating.calculate(winner_elo, loser_elo, true, factorK);
         var new_winner_elo = result.playerRating;
         var new_loser_elo = result.opponentRating;
 
@@ -276,13 +299,15 @@ function insertSaberRanked(){
         console.log("Winner exist: "+winner_exist);
         console.log(`RANKED: DETECT winner ` +winner+ ` with elo: ` +winner_elo);
         console.log(`RANKED: INSERT winner ` +winner+ ` with elo: ` +new_winner_elo);
-
+        
+        
         var stmt = db.prepare('INSERT INTO saber_ranking(date,player,color_player,elo) VALUES(?,?,?,?)');
         var info = stmt.run(date,loser,color_loser,new_loser_elo);
         console.log("Loser exist: "+loser_exist);
         console.log(`RANKED: DETECT loser ` +loser+ ` with elo: ` +loser_elo);
         console.log(`RANKED: INSERT loser ` +loser+ ` with elo: ` +new_loser_elo);
-
+       
+        
     });
     console.log("Finish saber ranked insertion");
 }
@@ -298,9 +323,7 @@ function insertFullForceRanked(){
 
     var stmt = db.prepare('SELECT date, winner, color_winner, loser, color_loser FROM full_force_duel WHERE date > ? ORDER BY date;');
     var rows = stmt.all(max);
-    //console.log(rows);
     rows.forEach(function callback(value, index) {
-        console.log(value.date, value.winner, value.loser);
         var date = value.date;
         var winner = value.winner;
         var color_winner = value.color_winner;
@@ -311,6 +334,8 @@ function insertFullForceRanked(){
         var loser_elo = 1200;
         var winner_exist = false;
         var loser_exist = false
+        var winner_count = 0;
+        var loser_count = 0;
     
     
         //check if winner exist ------------------------------------
@@ -329,23 +354,48 @@ function insertFullForceRanked(){
         }
         //-----------------------------------------------------------
 
-        //Find last winner duel ELO ---------------------------------
+        //Winner is apt - have more than 10 duels? ---------------------------------
         if(winner_exist){
+            var stmt = db.prepare('SELECT count(*) as count FROM full_force_duel where date < ? AND (winner = ? OR loser = ?)');
+            var row = stmt.get(date, winner, winner);
+            winner_count = row.count;
+        }
+        //-----------------------------------------------------------
+
+        //Loser is apt - have more than 10 duels? ---------------------------------
+        if(loser_exist){
+            var stmt = db.prepare('SELECT count(*) as count FROM full_force_duel where date < ? AND (winner = ? OR loser = ?)');
+            var row = stmt.get(date, loser, loser);
+            loser_count = row.count;
+        }
+        //-----------------------------------------------------------
+
+        //Get last winner duel ELO ---------------------------------
+        if(winner_count >=10){
             var stmt = db.prepare('SELECT max(date), elo FROM full_force_ranking WHERE player = ?;');
             var row = stmt.get(winner);
             winner_elo = row.elo;
         }
         //-----------------------------------------------------------
 
-        //Find last winner duel ELO ---------------------------------
-        if(loser_exist){
+        //Get last loser duel ELO ---------------------------------
+        if(loser_count >=10){
             var stmt = db.prepare('SELECT max(date), elo FROM full_force_ranking WHERE player = ?;');
             var row = stmt.get(loser);
             loser_elo = row.elo;
         }
         //-----------------------------------------------------------
 
-        var result = EloRating.calculate(winner_elo, loser_elo, true);
+        var difference =  EloRating.ratingDifference(winner_elo, loser_elo); 
+        var factorK = 20;
+
+        if(Math.abs(difference) <= 150 ) {
+            factorK = 24;
+        }else{
+            factorK = 8;
+        }
+
+        var result = EloRating.calculate(winner_elo, loser_elo, true, factorK);
         var new_winner_elo = result.playerRating;
         var new_loser_elo = result.opponentRating;
 
@@ -354,12 +404,15 @@ function insertFullForceRanked(){
         console.log("Winner exist: "+winner_exist);
         console.log(`RANKED: DETECT winner ` +winner+ ` with elo: ` +winner_elo);
         console.log(`RANKED: INSERT winner ` +winner+ ` with elo: ` +new_winner_elo);
-
+    
+    
         var stmt = db.prepare('INSERT INTO full_force_ranking(date,player,color_player,elo) VALUES(?,?,?,?)');
         var info = stmt.run(date,loser,color_loser,new_loser_elo);
         console.log("Loser exist: "+loser_exist);
         console.log(`RANKED: DETECT loser ` +loser+ ` with elo: ` +loser_elo);
         console.log(`RANKED: INSERT loser ` +loser+ ` with elo: ` +new_loser_elo);
+        
+        
 
     });
     console.log("Finish full force ranked insertion");

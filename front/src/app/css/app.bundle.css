@@ -913,7 +913,7 @@ animation-name: slideIn;
 }
 
 .page-item.disabled .page-link {
-    color: #6c757d;
+    color: #4c3f5d;
     background-color: var(--content-input-bg-color);
     border-color: var(--content-input-bg-color);
 }
@@ -1700,3 +1700,4 @@ pre {
 .white_name{
     color: #b3a4cf;
 }
+

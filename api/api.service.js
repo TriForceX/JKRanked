@@ -23,11 +23,23 @@ const db = new Database('/root/jkdata/db/data.db', {
 });
 
 // Use CORS FROM with Express
-app.use(cors());
+app.use(cors(),ensureSecure);
 
-app.use(express.static(__dirname + './../front/dist/jedi-knight-league',{ dotfiles: 'allow' }));
+app.use(express.static(__dirname + './../front/dist/jedi-knight-league',{ dotfiles: 'allow' }),ensureSecure);
 
 app.use(express.static(__dirname + '/static', { dotfiles: 'allow' } ))
+
+
+function ensureSecure(req, res, next){
+  if(req.secure){
+    // OK, continue
+    return next();
+  };
+  // handle port numbers if you need non defaults
+  // res.redirect('https://' + req.host + req.url); // express 3.x
+  res.redirect('https://' + req.hostname + req.url); // express 4.x
+}
+
 
 app.get('/API/stats-ffa', function (req, res, next) {
   var sql = `SELECT winner, color_winner, win, lose,  win*1.0/(win+lose) AS ratio FROM (
@@ -144,13 +156,13 @@ app.get('/API/saber_elo_level', function (req, res, next) {
   var sql = `select ROW_NUMBER() OVER (
     ORDER BY elo DESC
 ) pos, color_winner, elo, saber_exp FROM (
-    SELECT winner, color_winner, win+lose wl, (win*40)+(lose*10) as saber_exp FROM (
+    SELECT winner, color_winner, win+lose wl, (ifnull(win,0)*40)+(ifnull(lose,0)*10) as saber_exp FROM (
     SELECT winner, color_winner, count(winner) as win from saber_duel
     GROUP BY winner)
-    JOIN (
+    LEFT JOIN (
     SELECT loser, color_loser, count(loser) AS lose FROM saber_duel
     GROUP BY loser) ON winner = loser)
-  JOIN
+    LEFT JOIN
     (SELECT max(date) as date, player, elo FROM saber_ranking
   Group by player) on winner = player
   ORDER BY elo DESC;`;
@@ -168,13 +180,13 @@ app.get('/API/ff_elo_level', function (req, res, next) {
   var sql = `select ROW_NUMBER() OVER (
     ORDER BY elo DESC
 ) pos, color_winner, elo, ff_exp FROM (
-    SELECT winner, color_winner, win+lose wl, (win*40)+(lose*10) as ff_exp FROM (
+    SELECT winner, color_winner, win+lose wl, (ifnull(win,0)*40)+(ifnull(lose,0)*10) as ff_exp FROM (
     SELECT winner, color_winner, count(winner) as win from full_force_duel
     GROUP BY winner)
-    JOIN (
+    LEFT JOIN (
     SELECT loser, color_loser, count(loser) AS lose FROM full_force_duel
     GROUP BY loser) ON winner = loser)
-  JOIN
+    LEFT JOIN
     (SELECT max(date) as date, player, elo FROM full_force_ranking
   Group by player) on winner = player
   ORDER BY elo DESC;`;

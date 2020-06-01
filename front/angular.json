@@ -62,19 +62,19 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "jedi-knight-league:build",
+            "browserTarget": "skirata.pro:build",
             "port": 80
           },
           "configurations": {
             "production": {
-              "browserTarget": "jedi-knight-league:build:production"
+              "browserTarget": "skirata.pro:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "jedi-knight-league:build"
+            "browserTarget": "skirata.pro:build"
           }
         },
         "test": {
@@ -117,14 +117,14 @@
           },
           "configurations": {
             "production": {
-              "devServerTarget": "jedi-knight-league:serve:production"
+              "devServerTarget": "skirata.pro:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "jedi-knight-league",
+  "defaultProject": "skirata.pro",
   "cli": {
     "analytics": false
   }
