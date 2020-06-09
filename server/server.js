@@ -267,7 +267,7 @@ function insertSaberRanked(){
         //-----------------------------------------------------------
 
         //Get last winner duel ELO ---------------------------------
-        if(winner_count >=10){
+        if(winner_count >=9){
             var stmt = db.prepare('SELECT max(date), elo FROM saber_ranking WHERE player = ?;');
             var row = stmt.get(winner);
             winner_elo = row.elo;
@@ -275,7 +275,7 @@ function insertSaberRanked(){
         //-----------------------------------------------------------
 
         //Get last loser duel ELO ---------------------------------
-        if(loser_count >=10){
+        if(loser_count >=9){
             var stmt = db.prepare('SELECT max(date), elo FROM saber_ranking WHERE player = ?;');
             var row = stmt.get(loser);
             loser_elo = row.elo;
@@ -294,15 +294,24 @@ function insertSaberRanked(){
         var new_winner_elo = result.playerRating;
         var new_loser_elo = result.opponentRating;
 
+        
         var stmt = db.prepare('INSERT INTO saber_ranking(date,player,color_player,elo) VALUES(?,?,?,?)');
-        var info = stmt.run(date,winner,color_winner,new_winner_elo);
+        if(winner_count >=9){
+            var info = stmt.run(date,winner,color_winner,new_winner_elo);
+        }else{
+            var info = stmt.run(date,winner,color_winner,1200);
+        }
         console.log("Winner exist: "+winner_exist);
         console.log(`RANKED: DETECT winner ` +winner+ ` with elo: ` +winner_elo);
         console.log(`RANKED: INSERT winner ` +winner+ ` with elo: ` +new_winner_elo);
         
         
         var stmt = db.prepare('INSERT INTO saber_ranking(date,player,color_player,elo) VALUES(?,?,?,?)');
-        var info = stmt.run(date,loser,color_loser,new_loser_elo);
+        if(loser_count >=9){
+            var info = stmt.run(date,loser,color_loser,new_loser_elo);
+        }else{
+            var info = stmt.run(date,loser,color_loser,1200);
+        }
         console.log("Loser exist: "+loser_exist);
         console.log(`RANKED: DETECT loser ` +loser+ ` with elo: ` +loser_elo);
         console.log(`RANKED: INSERT loser ` +loser+ ` with elo: ` +new_loser_elo);
@@ -316,10 +325,16 @@ function insertFullForceRanked(){
     //Check if winner exist
     console.log("Start full force ranked insertion");
 
+
+
     //get the max date from saber ranking -------------------------------------
     var stmt = db.prepare('SELECT max(date) as max from full_force_ranking;');
     var row = stmt.get();
     var max = row.max;
+    if(max==null){
+        max = '2020-01-01';
+    }
+    
 
     var stmt = db.prepare('SELECT date, winner, color_winner, loser, color_loser FROM full_force_duel WHERE date > ? ORDER BY date;');
     var rows = stmt.all(max);
@@ -371,7 +386,7 @@ function insertFullForceRanked(){
         //-----------------------------------------------------------
 
         //Get last winner duel ELO ---------------------------------
-        if(winner_count >=10){
+        if(winner_count >=9){
             var stmt = db.prepare('SELECT max(date), elo FROM full_force_ranking WHERE player = ?;');
             var row = stmt.get(winner);
             winner_elo = row.elo;
@@ -379,7 +394,7 @@ function insertFullForceRanked(){
         //-----------------------------------------------------------
 
         //Get last loser duel ELO ---------------------------------
-        if(loser_count >=10){
+        if(loser_count >=9){
             var stmt = db.prepare('SELECT max(date), elo FROM full_force_ranking WHERE player = ?;');
             var row = stmt.get(loser);
             loser_elo = row.elo;
@@ -400,14 +415,22 @@ function insertFullForceRanked(){
         var new_loser_elo = result.opponentRating;
 
         var stmt = db.prepare('INSERT INTO full_force_ranking(date,player,color_player,elo) VALUES(?,?,?,?)');
-        var info = stmt.run(date,winner,color_winner,new_winner_elo);
+        if(winner_count >=9){
+            var info = stmt.run(date,winner,color_winner,new_winner_elo);
+        }else{
+            var info = stmt.run(date,winner,color_winner,1200);
+        }
         console.log("Winner exist: "+winner_exist);
         console.log(`RANKED: DETECT winner ` +winner+ ` with elo: ` +winner_elo);
         console.log(`RANKED: INSERT winner ` +winner+ ` with elo: ` +new_winner_elo);
     
     
         var stmt = db.prepare('INSERT INTO full_force_ranking(date,player,color_player,elo) VALUES(?,?,?,?)');
-        var info = stmt.run(date,loser,color_loser,new_loser_elo);
+        if(loser_count >=9){
+            var info = stmt.run(date,loser,color_loser,new_loser_elo);
+        }else{
+            var info = stmt.run(date,loser,color_loser,1200);
+        }
         console.log("Loser exist: "+loser_exist);
         console.log(`RANKED: DETECT loser ` +loser+ ` with elo: ` +loser_elo);
         console.log(`RANKED: INSERT loser ` +loser+ ` with elo: ` +new_loser_elo);

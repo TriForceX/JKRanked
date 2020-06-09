@@ -184,7 +184,7 @@ $(function() {
             
             $(".metismenu .mm-active ul").removeClass("mm-show");
             $(".metismenu .mm-active .has-arrow").attr("aria-expanded", "false");
-            $(".metismenu li").removeClass("mm-active");
+            //$(".metismenu li").removeClass("mm-active");
 
             $(".has-arrow").attr("aria-disabled", "false");
             $(".metismenu .element.active .has-arrow").attr("aria-expanded", "true");
@@ -292,7 +292,7 @@ $(function() {
                 $(".has-arrow").attr("aria-disabled", "true");
                 $(".has-arrow").attr("aria-expanded", "false");
                 $(".metismenu li ul.mm-show").removeClass("mm-show");
-                $(".metismenu>li.mm-active").removeClass("mm-active");
+                //$(".metismenu>li.mm-active").removeClass("mm-active");
 
                 desactiveSidebarScrollbar();
 
@@ -306,7 +306,7 @@ $(function() {
 
                 $(".metismenu .mm-active ul").removeClass("mm-show");
                 $(".metismenu .mm-active .has-arrow").attr("aria-expanded", "false");
-                $(".metismenu li").removeClass("mm-active");
+                //$(".metismenu li").removeClass("mm-active");
 
                 $(".has-arrow").attr("aria-disabled", "false");
                 $(".metismenu .element.active .has-arrow").attr("aria-expanded", "true");

@@ -6,9 +6,9 @@ var app = express();
 var cors = require('cors');
 
 // Certificate
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/skirata.pro/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/skirata.pro/cert.pem', 'utf8');
-const ca = fs.readFileSync('/etc/letsencrypt/live/skirata.pro/chain.pem', 'utf8');
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/jkranked.com/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/jkranked.com/cert.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/jkranked.com/chain.pem', 'utf8');
 
 const credentials = {
 	key: privateKey,
@@ -25,7 +25,7 @@ const db = new Database('/root/jkdata/db/data.db', {
 // Use CORS FROM with Express
 app.use(cors(),ensureSecure);
 
-app.use(express.static(__dirname + './../front/dist/jedi-knight-league',{ dotfiles: 'allow' }),ensureSecure);
+app.use(express.static(__dirname + './../front/dist/jkranked.com',{ dotfiles: 'allow' }),ensureSecure);
 
 app.use(express.static(__dirname + '/static', { dotfiles: 'allow' } ))
 
@@ -195,10 +195,10 @@ app.get('/API/ffa_wl_ratio', function (req, res, next) {
 app.get('/API/saber_elo_level', function (req, res, next) {
   var sql = `select ROW_NUMBER() OVER (
     ORDER BY elo DESC
-) pos, color_winner, elo, saber_exp FROM (
-    SELECT winner, color_winner, win+lose wl, (ifnull(win,0)*40)+(ifnull(lose,0)*10) as saber_exp FROM (
+) pos, color_winner, win, lose, elo, saber_exp FROM (
+    SELECT winner, color_winner, ifnull(win,0) as win,ifnull(lose,0) as lose, (ifnull(win,0)*40)+(ifnull(lose,0)*10) as saber_exp FROM (
     SELECT winner, color_winner, count(winner) as win from saber_duel
-    GROUP BY winner)
+    GROUP BY winner )
     LEFT JOIN (
     SELECT loser, color_loser, count(loser) AS lose FROM saber_duel
     GROUP BY loser) ON winner = loser)
@@ -219,10 +219,10 @@ app.get('/API/saber_elo_level', function (req, res, next) {
 app.get('/API/ff_elo_level', function (req, res, next) {
   var sql = `select ROW_NUMBER() OVER (
     ORDER BY elo DESC
-) pos, color_winner, elo, ff_exp FROM (
-    SELECT winner, color_winner, win+lose wl, (ifnull(win,0)*40)+(ifnull(lose,0)*10) as ff_exp FROM (
+) pos, color_winner, win, lose, elo, ff_exp FROM (
+    SELECT winner, color_winner, ifnull(win,0) as win,ifnull(lose,0) as lose, (ifnull(win,0)*40)+(ifnull(lose,0)*10) as ff_exp FROM (
     SELECT winner, color_winner, count(winner) as win from full_force_duel
-    GROUP BY winner)
+    GROUP BY winner )
     LEFT JOIN (
     SELECT loser, color_loser, count(loser) AS lose FROM full_force_duel
     GROUP BY loser) ON winner = loser)
@@ -249,6 +249,35 @@ app.get('/API/server_stats', function (req, res, next) {
     select count(*) as total_saber_duels from saber_duel)
     join (
     select count(*) as total_ff_duels from full_force_duel);`;
+  var stmt = db.prepare(sql);
+  var data = stmt.all();
+  
+  res.json({
+    "message":"success",
+    "data":data
+  })
+});
+
+
+//Last saber duels
+app.get('/API/last_saber_duels', function (req, res, next) {
+  var sql = `SELECT date, color_winner, color_loser, health, shield FROM saber_duel
+  ORDER BY date DESC
+  LIMIT 50;`;
+  var stmt = db.prepare(sql);
+  var data = stmt.all();
+  
+  res.json({
+    "message":"success",
+    "data":data
+  })
+});
+
+//Last full force duels
+app.get('/API/last_full_force_duels', function (req, res, next) {
+  var sql = `SELECT date, color_winner, color_loser, health, shield FROM full_force_duel
+  ORDER BY date DESC
+  LIMIT 50;`;
   var stmt = db.prepare(sql);
   var data = stmt.all();
   

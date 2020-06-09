@@ -1,0 +1,134 @@
+
+                  <div class="row">
+                    <div class="col">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-3 border-bottom" pt>
+                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                <h2><span class='fad fa-chart-pie-alt fa-fw'></span> Europe Server</h2>
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item">Dashboard</li>
+                                    <li class="breadcrumb-item active">Europe Server</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                  
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="fad fa-journal-whills display-4 text-primary"></div>
+                                    <div class="ml-3">
+                                        <div>TOTAL PLAYERS</div>
+                                        <div *ngIf="server_stats?.total_players; else 0" class="h3 mb-0">{{server_stats.total_players}} <i class="text-success fad fa-level-up"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="fad fa-space-station-moon-alt display-4 text-secondary"></div>
+                                    <div class="ml-3">
+                                        <div>TOTAL FFA KILLS</div>
+                                        <div *ngIf="server_stats?.total_ffa_kills; else 0" class="h3 mb-0">{{server_stats.total_ffa_kills}} <i class="text-success fad fa-level-up"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="fad fa-swords-laser display-4 text-tertiary"></div>
+                                    <div class="ml-3">
+                                        <div>TOTAL SABER DUELS</div>
+                                        <div *ngIf="server_stats?.total_saber_duels; else 0" class="h3 mb-0">{{server_stats.total_saber_duels}} <i class="text-success fad fa-level-up"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="fad fa-jedi display-4 text-quaternary"></div>
+                                    <div class="ml-3">
+                                        <div>TOTAL FULL FORCE DUELS</div>
+                                        <div *ngIf="server_stats?.total_ff_duels; else 0"  class="h3 mb-0">{{server_stats.total_ff_duels}} <i class="text-success fad fa-level-up"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-lg-12 col-xl-6">
+                        <div class="card md-6">
+                            <div class="card-header">TOP SABER RANKING</div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table *ngIf="saber_elo_level" datatable id="saber_ranking" class="table table-striped table-bordered" style="width:100%">
+                                      <thead>
+                                        <tr>
+                                            <th>P</th>
+                                            <th>Name</th>
+                                            <th>Lvl</th>
+                                            <th>W/L</th>
+                                            <th>ELO</th>
+                                            <th>League</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr  *ngFor = "let player of saber_elo_level">
+                                            <td>{{player.pos}}</td>
+                                            <td [innerHTML]="colorPlayer(player.color_winner)">{{colorPlayer(player.color_winner)}}</td>
+                                            <td>{{getLevel(player.saber_exp)}}</td>
+                                            <td class="sparkline">{{player.win}} / {{player.lose}}</td>
+                                            <td>{{player.elo}}</td>
+                                            <td [innerHTML]="getLeague(player.elo)">{{getLeague(player.elo)}}</td>
+                                        </tr>
+                                    </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-12 col-xl-6">
+                      <div class="card md-6">
+                          <div class="card-header">TOP FULL FORCE RANKING</div>
+                          <div class="card-body">
+                              <div class="table-responsive">
+                                  <table *ngIf="full_force_elo_level" datatable id="full_force_ranking" class="table table-striped table-bordered" style="width:100%">
+                                      <thead>
+                                          <tr>
+                                              <th>P</th>
+                                              <th>Name</th>
+                                              <th>Lvl</th>
+                                              <th>W/L</th>
+                                              <th>ELO</th>
+                                              <th>League</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody >
+                                        <tr *ngFor = "let player of full_force_elo_level">
+                                          <td>{{player.pos}}</td>
+                                          <td [innerHTML]="colorPlayer(player.color_winner)">{{colorPlayer(player.color_winner)}}</td>
+                                          <td>{{getLevel(player.ff_exp)}}</td>
+                                          <td class="sparkline">{{player.win}} / {{player.lose}}</td>
+                                          <td>{{player.elo}}</td>
+                                          <td [innerHTML]="getLeague(player.elo)">{{getLeague(player.elo)}}</td>
+                                          </tr>
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                </div>

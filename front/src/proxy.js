@@ -1,7 +1,7 @@
 var HttpsProxyAgent = require('https-proxy-agent');
 var proxyConfig = [{
   context: '/',
-  target: 'https://skirata.pro',
+  target: 'https://jkranked.com',
   secure: false
 }];
 

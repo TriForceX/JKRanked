@@ -1,39 +1,5 @@
-function datatables(){
-    $('#ffa_ranking').DataTable({
-        "order": [[ 0, "asc" ]],
-        "bLengthChange": false,
-        "deferRender": true,
-        "oLanguage": {
-                    "sInfo": '',
-                    "sInfoFiltered": ''
-        },
-        "aaSorting": [[ 1, 'desc' ]] // ?
-    });
 
-    $('#saber_ranking').DataTable({
-        "order": [[ 0, "asc" ]],
-        "bLengthChange": false,
-        "deferRender": true,
-        "oLanguage": {
-                    "sInfo": '',
-                    "sInfoFiltered": ''
-        },
-        "aaSorting": [[ 1, 'desc' ]] // ?
-    });
 
-    $('#full_force_ranking').DataTable({
-        "order": [[ 0, "asc" ]],
-        "bLengthChange": false,
-        "deferRender": true,
-        "oLanguage": {
-                    "sInfo": '',
-                    "sInfoFiltered": ''
-        },
-        "aaSorting": [[ 1, 'asc' ]] // ?
-    });
-}
-
-setTimeout(datatables,500);
 
  /*
             var graph1 = getComputedStyle(document.documentElement).getPropertyValue('--primary');
