@@ -809,6 +809,11 @@ animation-name: slideIn;
     border-top: 1px solid var(--main-transparent-color);
 }
 
+.table th,
+.table td {
+	white-space: nowrap;
+}
+
 .table {
     color: var(--content-font-color);
 }
